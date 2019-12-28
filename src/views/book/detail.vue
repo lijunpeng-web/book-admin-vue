@@ -13,22 +13,25 @@
         </el-select>
       </el-form-item>
       <el-form-item label="上架">
-        <el-switch v-model="form.type"></el-switch>
+        <el-switch
+          v-model="form.is_display"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-value="Y"
+          inactive-value="N">
+        </el-switch>
       </el-form-item>
-      <el-form-item label="价格">
+      <el-form-item label="是否免费">
+        <el-select v-model="form.is_free" placeholder="请选择类型">
+          <el-option label="免费" value="Y"></el-option>
+          <el-option label="付费" value="N"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="价格" v-if="form.is_free === 'N'">
         <el-input type="number" v-model="form.price"></el-input>
       </el-form-item>
       <el-form-item label="封面">
-        <el-upload
-          class="avatar-uploader"
-          action="http://localhost:3000/common/upload"
-          :headers="headers"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
+        <my-upload @setImageUrl="setImageUrl" :imgUrl="imageUrl"></my-upload>
       </el-form-item>
       <el-form-item label="简介">
         <el-input type="textarea" v-model="form.description"></el-input>
@@ -46,20 +49,26 @@
 <script>
 import { addBook, getBookDetails, updataBookDetails, getSortType } from '@/api/book'
 import { getToken } from '@/utils/auth'
+import myUpload from '@/components/upload'
+
 export default {
+  components: {
+    myUpload
+  },
   data() {
     return {
       form: {
         bookname: '',
         sortid: '',
-        type: true,
+        is_display: 'Y',
         description: '',
         author: '',
-        price: ''
+        price: '',
+        is_free: ''
       },
       sortData: [],
-      imageUrl: '',
       imageName: '',
+      imageUrl: '',
       bookid: '',
       headers: {
         Authorization: getToken()
@@ -91,31 +100,13 @@ export default {
         this.listLoading = false
         if (res.code === 0) {
           this.form = res.data
-          if (res.data.type) {
-            this.form.type = true
-          } else {
-            this.form.type = false
-          }
           this.imageUrl = `http://localhost:3000/upload` + res.data.images
         }
       })
     },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = res.data.url
-      this.imageName = res.data.name
-      console.log(res)
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
+    setImageUrl(name) {
+      console.log(name)
+      this.imageName = name
     },
     onSubmit() {
       this.listLoading = true

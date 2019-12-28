@@ -1,7 +1,7 @@
 <template>
   <div class="book-container" v-loading="listLoading">
     <el-table
-      height="460"
+      height="550"
       border
       :data="tableData"
       style="width: 100%"
@@ -38,11 +38,16 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="type"
+        prop="is_display"
         label="上架">
         <template slot-scope="scope">
-          <el-switch active-color="#13ce66" inactive-color="#ff4949" v-model="scope.row.type"
-            @change="change(scope.$index,scope.row)">
+          <el-switch
+            @change="change(scope.$index,scope.row)"
+            v-model="scope.row.is_display"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-value="Y"
+            inactive-value="N">
           </el-switch>
         </template>
       </el-table-column>
@@ -74,7 +79,7 @@ export default {
     return {
       name: '列表',
       tableData: [],
-      pageSize: 2,
+      pageSize: 3,
       pageNum: 1,
       listLoading: true,
       totalPage: 100
@@ -113,7 +118,7 @@ export default {
     change(index, row) {
       let data = {
         id: row.id,
-        type: row.type
+        is_display: row.is_display
       }
       console.log(data)
       modifyUpperShelfType(data).then(res => {
