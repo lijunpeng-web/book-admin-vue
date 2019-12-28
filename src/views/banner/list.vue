@@ -1,45 +1,42 @@
 <template>
-  <div class="book-container">
+  <div class="book-container" v-loading="listLoading">
     <el-table
-      height="460"
+      height="550"
       border
-      v-loading="listLoading"
       :data="tableData"
       style="width: 100%"
       :row-class-name="tableRowClassName">
       <el-table-column
-        prop="bookname"
+        prop="name"
         label="名称">
       </el-table-column>
       <el-table-column
-        prop="author"
-        label="姓名">
+        prop="start_time"
+        label="开始时间">
       </el-table-column>
       <el-table-column
-        prop="descs"
-        label="简介">
+        prop="end_time"
+        label="结束时间">
       </el-table-column>
       <el-table-column
-        prop="sortid"
-        label="类型">
-      </el-table-column>
-      <el-table-column
-        prop="images"
+        prop="banner_img"
         label="封面"
         width="120">
         <template slot-scope="scope">
-          <img class="showlogo" :src="'http://localhost:3000//upload'+scope.row.images" alt="" srcset="">
-          <!-- <el-switch active-color="#13ce66" inactive-color="#ff4949" v-model="scope.row.type"
-            @change="change(scope.$index,scope.row)">
-          </el-switch> -->
+          <img class="showlogo" :src="'http://localhost:3000/upload'+scope.row.banner_img" alt="" srcset="">
         </template>
       </el-table-column>
       <el-table-column
-        prop="type"
+        prop="is_display"
         label="上架">
         <template slot-scope="scope">
-          <el-switch active-color="#13ce66" inactive-color="#ff4949" v-model="scope.row.type"
-            @change="change(scope.$index,scope.row)">
+          <el-switch
+            @change="change(scope.$index,scope.row)"
+            v-model="scope.row.is_display"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-value="Y"
+            inactive-value="N">
           </el-switch>
         </template>
       </el-table-column>
@@ -65,7 +62,7 @@
   </div>
 </template>
 <script>
-import { getBookList, modifyUpperShelfType } from '@/api/book'
+import { getBannerList, updateIsDisplay } from '@/api/banner'
 export default {
   data() {
     return {
@@ -78,22 +75,26 @@ export default {
     }
   },
   created() {
-    this.getBookData()
+    this.getBannerData()
   },
   methods: {
     handleClick(row) {
       let id = row.id
-      this.$router.push(`/book/detail?id=${id}`)
+      this.$router.push(`/banner/detail?id=${id}`)
     },
-    getBookData() {
+    getBannerData() {
       this.listLoading = true
       let data = {
         pageSize: this.pageSize,
         pageNum: this.pageNum
       }
-      getBookList(data).then(res => {
+      getBannerList(data).then(res => {
         this.listLoading = false
         if (res.code === 0) {
+          res.data.list.forEach(item => {
+            item.start_time = this.$moment(item.start_time).format('YYYY-MM-DD hh:mm:ss ')
+            item.end_time = this.$moment(item.end_time).format('YYYY-MM-DD  hh:mm:ss ')
+          })
           this.tableData = res.data.list
           this.totalPage = res.data.total
         }
@@ -110,22 +111,22 @@ export default {
     change(index, row) {
       let data = {
         id: row.id,
-        type: row.type
+        is_display: row.is_display
       }
       console.log(data)
-      modifyUpperShelfType(data).then(res => {
+      updateIsDisplay(data).then(res => {
         console.log(res)
-        this.getBookData()
+        this.getBannerData()
       })
     },
     //分页
     handleCurrentChange: function(val) {
       this.pageNum = val
-      this.getBookData()
+      this.getBannerData()
     },
     handleSizeChange(val) {
       this.pageSize = val
-      this.getBookData()
+      this.getBannerData()
       // console.log(`每页 ${val} 条`);
     }
   }

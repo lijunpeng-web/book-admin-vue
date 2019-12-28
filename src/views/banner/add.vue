@@ -1,34 +1,29 @@
 <template>
-  <div class="book-container">
+  <div class="book-container" v-loading="listLoading">
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="名称">
-        <el-input v-model="form.bookname"></el-input>
-      </el-form-item>
-      <el-form-item label="作者">
-        <el-input v-model="form.author"></el-input>
-      </el-form-item>
-      <el-form-item label="类型">
-        <el-select v-model="form.sortid" placeholder="请选择类型">
-          <el-option label="玄幻" value="1"></el-option>
-          <el-option label="言情" value="2"></el-option>
-        </el-select>
+        <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="上架">
-        <el-switch v-model="form.type"></el-switch>
+        <el-switch
+          v-model="form.is_display"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-value="Y"
+          inactive-value="N">
+        </el-switch>
+      </el-form-item>
+      <el-form-item label="时间">
+        <el-date-picker
+          v-model="form.date"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="封面">
-        <el-upload
-          class="avatar-uploader"
-          action="http://localhost:3000/book/upload"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="简介">
-        <el-input type="textarea" v-model="form.descs"></el-input>
+        <my-upload @setImageUrl="setImageUrl"></my-upload>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -38,47 +33,45 @@
     <!-- <img src="http://localhost:3000/public/upload/1577168729064.png" alt="" srcset=""> -->
   </div>
 </template>
-
-
 <script>
-import { addBook } from '@/api/book'
+import { addBanner } from '@/api/banner'
+import myUpload from '@/components/upload'
 export default {
+  components: {
+    myUpload
+  },
   data() {
     return {
       form: {
-        bookname: '',
-        sortid: '',
-        type: true,
-        descs: '',
-        author: ''
+        name: '',
+        is_display: 'Y',
+        date: []
       },
-      imageUrl: '',
-      imageName: ''
+      imageName: '',
+      listLoading: false
     }
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = res.data.url
-      this.imageName = res.data.name
-      console.log(res)
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
+    setImageUrl(name) {
+      console.log(name)
+      this.imageName = name
     },
     onSubmit() {
+      this.listLoading = true
       let data = this.form
-      data.imageName = this.imageName
-      addBook(data).then(res => {
+      data.banner_img = this.imageName
+      data.start_time = data.date[0]
+      data.end_time = data.date[1]
+      addBanner(data).then(res => {
+        this.listLoading = false
         console.log(res)
+        if (res.code === 0) {
+          this.$message({
+            message: '新增成功！',
+            type: 'success'
+          })
+          this.$router.push('/banner/list')
+        }
       })
     }
   }
@@ -93,30 +86,5 @@ export default {
     font-size: 30px;
     line-height: 46px;
   }
-}
-.avatar-uploader {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  width: 100px;
-  height: 100px;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
-  text-align: center;
-}
-.avatar {
-  width: 100px;
-  height: 100px;
-  display: block;
 }
 </style>
