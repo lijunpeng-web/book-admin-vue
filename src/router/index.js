@@ -49,58 +49,36 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: '首页',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
   },
   {
     path: '/banner',
     component: Layout,
     redirect: '/banner/list',
-    name: 'Banner',
-    meta: { title: 'Banner', icon: 'example' },
+    name: '广告管理',
+    meta: { title: '广告', icon: 'ad-svg' },
     children: [
       {
         path: 'list',
-        name: 'List',
+        name: '列表',
         component: () => import('@/views/banner/list'),
-        meta: { title: 'List', icon: 'table' }
+        meta: { title: '列表', icon: 'list-svg' }
       },
       {
         path: 'detail',
-        name: 'Detail',
+        name: '详情',
         component: () => import('@/views/banner/detail'),
-        meta: { title: 'Detail', icon: 'tree' },
+        meta: { title: '详情', icon: 'details-svg' },
         hidden: true
       },
       {
         path: 'add',
-        name: 'Add',
+        name: '新增',
         component: () => import('@/views/banner/add'),
-        meta: { title: 'Add', icon: 'tree' }
+        meta: { title: '新增', icon: 'tree' }
       }
     ]
   },
@@ -108,30 +86,64 @@ export const constantRoutes = [
     path: '/book',
     component: Layout,
     redirect: '/book/list',
-    name: 'Book',
-    meta: { title: 'Book', icon: 'example' },
+    name: '书本管理',
+    meta: { title: '书本管理', icon: 'book-svg' },
     children: [
       {
         path: 'list',
-        name: 'List',
+        name: '列表',
         component: () => import('@/views/book/list'),
-        meta: { title: 'List', icon: 'table' }
+        meta: { title: '列表', icon: 'list-svg' }
       },
       {
         path: 'detail',
-        name: 'Detail',
+        name: '详情',
         component: () => import('@/views/book/detail'),
-        meta: { title: 'Detail', icon: 'tree' },
+        meta: { title: '详情', icon: 'details-svg' },
         hidden: true
       },
       {
         path: 'add',
-        name: 'Add',
+        name: '新增',
         component: () => import('@/views/book/add'),
-        meta: { title: 'Add', icon: 'tree' }
+        meta: { title: '新增', icon: 'tree' }
       }
     ]
   },
+  {
+    path: '/users',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: '用户列表',
+        component: () => import('@/views/users/index'),
+        meta: { title: '用户列表', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/example',
+    component: Layout,
+    redirect: '/example/table',
+    name: '例子',
+    meta: { title: '例子', icon: 'example' },
+    children: [
+      {
+        path: 'table',
+        name: '表格',
+        component: () => import('@/views/table/index'),
+        meta: { title: '表格', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: '树结构',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '树结构', icon: 'tree' }
+      }
+    ]
+  },
+
   {
     path: '/form',
     component: Layout,

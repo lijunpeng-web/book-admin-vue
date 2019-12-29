@@ -26,8 +26,7 @@
         <my-upload @setImageUrl="setImageUrl" :imgUrl="imageUrl"></my-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="btnLoading">确认修改</el-button>
       </el-form-item>
     </el-form>
     <!-- <img src="http://localhost:3000/public/upload/1577168729064.png" alt="" srcset=""> -->
@@ -50,7 +49,8 @@ export default {
       imageName: '',
       imageUrl: '',
       bannerid: '',
-      listLoading: false
+      listLoading: false,
+      btnLoading: false
     }
   },
   created() {
@@ -64,9 +64,11 @@ export default {
         id: this.bannerid
       }
       this.listLoading = true
+      this.btnLoading = true
       getBannerDetails(data).then(res => {
         console.log(res)
         this.listLoading = false
+        this.btnLoading = false
         if (res.code === 0) {
           this.form = res.data
           this.form.date = [res.data.start_time, res.data.end_time]

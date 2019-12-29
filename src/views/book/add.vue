@@ -30,6 +30,9 @@
       <el-form-item label="价格" v-if="form.is_free === 'N'">
         <el-input type="number" v-model="form.price"></el-input>
       </el-form-item>
+      <el-form-item label="vip价格" v-if="form.is_free === 'N'">
+        <el-input type="number" v-model="form.vip_price"></el-input>
+      </el-form-item>
       <el-form-item label="封面">
         <my-upload @setImageUrl="setImageUrl"></my-upload>
       </el-form-item>
@@ -37,8 +40,7 @@
         <el-input type="textarea" v-model="form.description"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="btnLoading">立即创建</el-button>
       </el-form-item>
     </el-form>
     <!-- <img src="http://localhost:3000/public/upload/1577168729064.png" alt="" srcset=""> -->
@@ -64,11 +66,13 @@ export default {
         description: '',
         author: '',
         price: '',
-        is_free: 'N'
+        is_free: 'N',
+        vip_price: ''
       },
       sortData: [],
       imageName: '',
-      listLoading: false
+      listLoading: false,
+      btnLoading: false
     }
   },
   created() {
@@ -88,10 +92,12 @@ export default {
     },
     onSubmit() {
       this.listLoading = true
+      this.btnLoading = true
       let data = this.form
       data.imageName = this.imageName
       addBook(data).then(res => {
         this.listLoading = false
+        this.btnLoading = false
         console.log(res)
         if (res.code === 0) {
           this.$message({

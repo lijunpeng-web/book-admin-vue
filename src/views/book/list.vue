@@ -23,6 +23,10 @@
         label="价格">
       </el-table-column>
       <el-table-column
+        prop="vip_price"
+        label="vip价格">
+      </el-table-column>
+      <el-table-column
         prop="sortname"
         label="类型">
       </el-table-column>

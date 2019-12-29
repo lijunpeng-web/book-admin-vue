@@ -68,7 +68,7 @@ export default {
     return {
       name: '列表',
       tableData: [],
-      pageSize: 2,
+      pageSize: 3,
       pageNum: 1,
       listLoading: true,
       totalPage: 100
