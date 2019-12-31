@@ -14,7 +14,12 @@
 <script>
 import { getToken } from '@/utils/auth'
 export default {
-  props: ['imgUrl'],
+  props: {
+    imgUrl: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       headers: {
@@ -22,6 +27,11 @@ export default {
       },
       imageUrl: '',
       imageName: ''
+    }
+  },
+  watch: {
+    imgUrl: function(newVal, oldVal) {
+      this.imageUrl = newVal //newVal即是chartData
     }
   },
   methods: {
@@ -42,11 +52,6 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
       return isJPG && isLt2M
-    }
-  },
-  watch: {
-    imgUrl: function(newVal, oldVal) {
-      this.imageUrl = newVal //newVal即是chartData
     }
   }
 }
