@@ -18,13 +18,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'space-before-function-paren': 0,
-    'comma-dangle': [
-      'error',
-      {
-        objects: 'always-multiline',
-        arrays: 'always-multiline',
-      },
-    ],
+    "comma-dangle": ["error", "only-multiline"],
     'standard/computed-property-even-spacing': 0,
   },
   parserOptions: {
