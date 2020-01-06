@@ -7,9 +7,15 @@
       <el-form-item label="作者">
         <el-input v-model="form.author"></el-input>
       </el-form-item>
-      <el-form-item label="类型">
+      <el-form-item label="书本类型">
         <el-select v-model="form.sortid" placeholder="请选择类型">
           <el-option v-for="(item,index) in sortData" :key="index" :label="item.sortname" :value="item.id"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="显示类型">
+        <el-select v-model="form.book_type_id" placeholder="请选择类型">
+          <el-option v-for="(item,index) in bookTypeData" :key="index" :label="item.title" :value="item.type_id">
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="上架">
@@ -20,6 +26,10 @@
           active-value="Y"
           inactive-value="N">
         </el-switch>
+      </el-form-item>
+      <el-form-item label="人群类型">
+        <el-radio v-model="form.renqun_type" label="M">男生</el-radio>
+        <el-radio v-model="form.renqun_type" label="W">女生</el-radio>
       </el-form-item>
       <el-form-item label="是否免费">
         <el-select v-model="form.is_free" placeholder="请选择类型">
@@ -49,7 +59,7 @@
 
 
 <script>
-import { addBook, getSortType } from '@/api/book'
+import { addBook, getSortType, getBookType } from '@/api/book'
 import { getToken } from '@/utils/auth'
 import myUpload from '@/components/upload'
 
@@ -67,22 +77,33 @@ export default {
         author: '',
         price: '',
         is_free: 'N',
-        vip_price: ''
+        vip_price: '',
+        renqun_type: 'M',
+        book_type_id: ''
       },
       sortData: [],
       imageName: '',
       listLoading: false,
-      btnLoading: false
+      btnLoading: false,
+      bookTypeData: []
     }
   },
   created() {
     this.getSort()
+    this.getType()
   },
   methods: {
     getSort() {
       getSortType().then(res => {
         if (res.code === 0) {
           this.sortData = res.data
+        }
+      })
+    },
+    getType() {
+      getBookType().then(res => {
+        if (res.code === 0) {
+          this.bookTypeData = res.data
         }
       })
     },

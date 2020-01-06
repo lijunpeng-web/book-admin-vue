@@ -28,7 +28,19 @@
       </el-table-column>
       <el-table-column
         prop="sortname"
-        label="类型">
+        label="书本类型">
+      </el-table-column>
+      <el-table-column
+        prop="title"
+        label="显示类型">
+      </el-table-column>
+      <el-table-column
+        prop="renqun_type"
+        label="显示类型">
+        <template slot-scope="scope">
+          <span v-if="scope.row.renqun_type === 'M'">男生</span>
+          <span v-else>女生</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="images"
@@ -36,9 +48,6 @@
         width="120">
         <template slot-scope="scope">
           <img class="showlogo" :src="'http://localhost:3000/upload'+scope.row.images" alt="" srcset="">
-          <!-- <el-switch active-color="#13ce66" inactive-color="#ff4949" v-model="scope.row.type"
-            @change="change(scope.$index,scope.row)">
-          </el-switch> -->
         </template>
       </el-table-column>
       <el-table-column

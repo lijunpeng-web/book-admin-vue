@@ -48,3 +48,11 @@ export function getSortType(params) {
     params
   })
 }
+
+export function getBookType(params) {
+  return request({
+    url: '/api/book/booktype',
+    method: 'get',
+    params
+  })
+}
