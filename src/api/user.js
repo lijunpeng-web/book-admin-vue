@@ -18,9 +18,8 @@ export function userInfoList(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/api/users/usersinfo',
     method: 'get',
-    params: { token }
   })
 }
 

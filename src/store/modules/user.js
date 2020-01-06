@@ -38,21 +38,21 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    console.log(state.token)
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getInfo().then(response => {
         const { data } = response
-
+        console.log(response, '-----response')
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
+        const { username, avatar } = data
+        console.log(username, avatar)
+        commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
-        reject(error)
+        // reject(error)
       })
     })
   },
