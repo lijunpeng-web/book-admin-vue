@@ -2,7 +2,7 @@
   <div class="book-container" v-loading="btnLoading">
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item class="form-item" label="名称">
-        <el-input v-model="form.chaper_name"></el-input>
+        <el-input v-model="form.chapter_name"></el-input>
       </el-form-item>
       <el-form-item class="form-item" label="排序(大-小)">
         <el-input type="number" v-model="form.order_num"></el-input>
@@ -27,7 +27,7 @@ export default {
       bookid: '',
       chapterid: '',
       form: {
-        chaper_name: '',
+        chapter_name: '',
         order_num: 9999,
         content: ''
       },

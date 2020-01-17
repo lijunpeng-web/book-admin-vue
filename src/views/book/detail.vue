@@ -52,7 +52,7 @@
       <el-form-item label="目录(拖动排序)">
         <draggable v-model="chaptersData" @update="datadragEnd" :options="{animation:200}">
           <div class="chapter" v-for="(item,index) in chaptersData" :key="index"
-            @click="goToChapter(item.book_id,item.chapter_id)">{{item.chaper_name}}</div>
+            @click="goToChapter(item.book_id,item.chapter_id)">{{item.chapter_name}}</div>
         </draggable>
         <el-button type="primary" @click="addChapter()">新增章节</el-button>
       </el-form-item>
