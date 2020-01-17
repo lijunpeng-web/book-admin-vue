@@ -107,6 +107,13 @@ export const constantRoutes = [
         name: '新增',
         component: () => import('@/views/book/add'),
         meta: { title: '新增', icon: 'tree' }
+      },
+      {
+        path: 'chapter',
+        name: '章节',
+        component: () => import('@/views/book/chapter'),
+        meta: { title: '章节', icon: 'tree' },
+        hidden: true
       }
     ]
   },

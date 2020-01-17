@@ -56,3 +56,34 @@ export function getBookType(params) {
     params
   })
 }
+
+export function getChapterDetails(params) {
+  return request({
+    url: '/api/book/chapter',
+    method: 'get',
+    params
+  })
+}
+
+export function upChapterDetails(params) {
+  return request({
+    url: '/api/book/upchapter',
+    method: 'post',
+    data: params
+  })
+}
+export function addChapterDetails(params) {
+  return request({
+    url: '/api/book/addchapter',
+    method: 'post',
+    data: params
+  })
+}
+
+export function sortOrder(params) {
+  return request({
+    url: '/api/book/sortorder',
+    method: 'post',
+    data: params
+  })
+}

@@ -1,6 +1,6 @@
 <template>
-  <div class="book-container">
-    <el-form ref="form" :model="form" label-width="80px">
+  <div class="book-container" v-loading="btnLoading">
+    <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="名称">
         <el-input v-model="form.bookname"></el-input>
       </el-form-item>
@@ -49,8 +49,15 @@
       <el-form-item label="简介">
         <el-input type="textarea" v-model="form.description"></el-input>
       </el-form-item>
+      <el-form-item label="目录(拖动排序)">
+        <draggable v-model="chaptersData" @update="datadragEnd" :options="{animation:200}">
+          <div class="chapter" v-for="(item,index) in chaptersData" :key="index"
+            @click="goToChapter(item.book_id,item.chapter_id)">{{item.chaper_name}}</div>
+        </draggable>
+        <el-button type="primary" @click="addChapter()">新增章节</el-button>
+      </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit" :loading="btnLoading">确认修改</el-button>
+        <el-button type="primary" style="width:100%" @click="onSubmit" :loading="btnLoading">确认修改</el-button>
       </el-form-item>
     </el-form>
     <!-- <img src="http://localhost:3000/public/upload/1577168729064.png" alt="" srcset=""> -->
@@ -59,13 +66,15 @@
 
 
 <script>
-import { addBook, getBookDetails, updataBookDetails, getSortType, getBookType } from '@/api/book'
+import { addBook, getBookDetails, updataBookDetails, getSortType, getBookType, sortOrder } from '@/api/book'
 import { getToken } from '@/utils/auth'
 import myUpload from '@/components/upload'
+import draggable from 'vuedraggable'
 
 export default {
   components: {
-    myUpload
+    myUpload,
+    draggable
   },
   data() {
     return {
@@ -90,7 +99,8 @@ export default {
       },
       listLoading: false,
       btnLoading: false,
-      bookTypeData: []
+      bookTypeData: [],
+      chaptersData: []
     }
   },
   created() {
@@ -101,6 +111,40 @@ export default {
     this.getType()
   },
   methods: {
+    async datadragEnd(evt) {
+      evt.preventDefault()
+      let arr = this.chaptersData
+      let newArr = await arr.map((item, i) => {
+        return {
+          order_num: i,
+          chapter_id: item.chapter_id,
+          book_id: item.book_id
+        }
+      })
+
+      console.log(newArr)
+      this.btnLoading = true
+      let data = {
+        list: newArr
+      }
+      sortOrder(data).then(res => {
+        this.btnLoading = false
+        if (res.code === 0) {
+          this.$message({
+            message: '已修改排序',
+            type: 'success'
+          })
+        } else {
+          this.$message.error('修改排序失败')
+        }
+      })
+    },
+    addChapter() {
+      this.$router.push(`/book/chapter?bookid=${this.bookid}`)
+    },
+    goToChapter(bookid, chapterid) {
+      this.$router.push(`/book/chapter?bookid=${bookid}&chapterid=${chapterid}`)
+    },
     getSort() {
       getSortType().then(res => {
         if (res.code === 0) {
@@ -126,8 +170,9 @@ export default {
         this.listLoading = false
         this.btnLoading = false
         if (res.code === 0) {
-          this.form = res.data
-          this.imageUrl = `http://localhost:3000/upload` + res.data.images
+          this.form = res.data.detail
+          this.chaptersData = res.data.chapters
+          this.imageUrl = `http://localhost:3000/upload` + res.data.detail.images
         }
       })
     },
@@ -188,5 +233,8 @@ export default {
   width: 100px;
   height: 100px;
   display: block;
+}
+.chapter {
+  cursor: pointer;
 }
 </style>

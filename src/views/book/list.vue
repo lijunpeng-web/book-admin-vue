@@ -16,6 +16,7 @@
       </el-table-column>
       <el-table-column
         prop="description"
+        :show-overflow-tooltip="true"
         label="简介">
       </el-table-column>
       <el-table-column
