@@ -116,7 +116,7 @@ export default {
       let arr = this.chaptersData
       let newArr = await arr.map((item, i) => {
         return {
-          order_num: i,
+          order_num: i + 1,
           chapter_id: item.chapter_id,
           book_id: item.book_id
         }

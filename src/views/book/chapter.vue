@@ -8,7 +8,8 @@
         <el-input type="number" v-model="form.order_num"></el-input>
       </el-form-item>
       <el-form-item label="简介">
-        <el-input type="textarea" :rows="20" v-model="form.content"></el-input>
+        <wang-editor :content="form.content" @catchData="catchData"></wang-editor>
+        <!-- <el-input type="textarea" :rows="20" v-model="form.content"></el-input> -->
       </el-form-item>
       <el-form-item class="form-item">
         <el-button v-if="chapterid" type="primary" style="width:100%" @click="onSubmit" :loading="btnLoading">确认修改
@@ -21,7 +22,11 @@
 </template>
 <script>
 import { getChapterDetails, upChapterDetails, addChapterDetails } from '@/api/book'
+import wangEditor from '@/components/wangEditor'
 export default {
+  components: {
+    wangEditor
+  },
   data() {
     return {
       bookid: '',
@@ -43,6 +48,10 @@ export default {
     }
   },
   methods: {
+    catchData(content) {
+      this.form.content = content
+      console.log(this.form.content)
+    },
     getChapter() {
       let params = {
         bookid: this.bookid,
