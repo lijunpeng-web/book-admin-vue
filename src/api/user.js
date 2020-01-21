@@ -10,7 +10,7 @@ export function login(data) {
 
 export function userInfoList(data) {
   return request({
-    url: '/api/users/usersinfo',
+    url: '/api/users/userslist',
     method: 'get',
     params: data
   })

@@ -39,7 +39,7 @@
         label="头像"
         width="120">
         <template slot-scope="scope">
-          <img class="showlogo" :src="'http://localhost:3000/upload'+scope.row.images" alt="" srcset="">
+          <img class="showlogo" :src="'http://localhost:3000/upload'+scope.row.head_portrait" alt="" srcset="">
         </template>
       </el-table-column>
     </el-table>
@@ -56,6 +56,7 @@
 </template>
 <script>
 import { userInfoList } from '@/api/user'
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -84,6 +85,9 @@ export default {
       userInfoList(data).then(res => {
         this.listLoading = false
         if (res.code === 0) {
+          res.data.list.forEach(item => {
+            item.logintime = moment(item.logintime).format('YYYY-MM-DD hh:mm:ss ')
+          })
           this.tableData = res.data.list
           this.totalPage = res.data.total
         }
@@ -130,6 +134,8 @@ export default {
 }
 
 .showlogo {
-  width: 100px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 </style>
